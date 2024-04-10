@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="TimeNeRF: Building Generalizable Neural Radiance Fields across Time fromFew-Shot Input Views">
+  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TimeNeRF: Building Generalizable Neural Radiance Fields across Time from
+    Few-Shot Input Views</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    .video-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .video-item {
+        flex: 1;
+        margin-right: 10px;
+    }
+    
+    .zoomable-image {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .zoomed-image {
+        position: absolute;
+        border: 2px solid red;
+        display: none;
+    }
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+</style>
+  
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">TimeNeRF: Building Generalizable Neural Radiance Fields across Time from
+            Few-Shot Input Views</h1>
+          <!-- <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://keunhong.com">Keunhong Park</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://utkarshsinha.com">Utkarsh Sinha</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://jonbarron.info">Jonathan T. Barron</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="http://sofienbouaziz.com">Sofien Bouaziz</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.danbgoldman.com">Dan B Goldman</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://homes.cs.washington.edu/~seitz/">Steven M. Seitz</a><sup>1,2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="http://www.ricardomartinbrualla.com">Ricardo Martin-Brualla</a><sup>2</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Washington,</span>
+            <span class="author-block"><sup>2</sup>Google Research</span>
+          </div> -->
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- <section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="./static/videos/teaser.mp4"
+                type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
+        free-viewpoint
+        portraits.
+      </h2>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <h2>imeNeRF: Building Generalizable Neural Radiance Fields across Time from
+          Few-Shot Input Views</h2>
+        <div class="fig1">
+          <img src="image/cycle.jpg" alt="cycle Image" id="cycle-image">
+        </div>
+        <!-- <div class="item item-pdf">
+          <object data="./image/method.pdf" type="application/pdf" width="100%" height="500">
+            <p>Sorry, your browser does not support embedded PDFs.</p>
+          </object>
+        </div> -->
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            We present TimeNeRF, a generalizable neural rendering approach for rendering novel views at arbitrary viewpoints and at arbitrary times, even with few input views. 
+          </p>
+          <p>
+            For realworld applications, it is expensive to collect multiple views,and inefficient to reoptimize for unseen scenes. Additionally, to provide a completely immersive experience, creating environments that can transition seamlessly from day tonight is essential. Although current NeRFbased methodsdemonstrate powerful results in novel view synthesis, theyfall short of achieving the aforementioned goals. To thisend, we leverage multiview stereo, neural radiance field,and disentanglement techniques. This equips our modelwith the capability for generalizability in a fewshot setting, allows us to construct an implicit content radiance field for scene representation, and further enables the building of neural radiance fields at any arbitrary time.
+          </p>
+          <p>
+            Finally, we synthesize novel views of that time via volume rendering. Experiments show that TimeNeRF is not only capableof rendering novel views in a few-shot setting without perscene optimization but also excels in creating realistic novelviews that transition smoothly across different times of theday, capturing intricate natural changes.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <div class="fig1">
+      <center> <img src="image/cycle.jpg" alt="cycle Image" id="cycle-image" style="width:700px;height:600px;"></center>
+      <figcaption>Figure 3. Novel view synthesis across times. The images in the
+        <span style="color: #f6c90c">yellow box</span> represent the two input views of a test scene. The
+        images around the circle are novel views at different times. The
+        image in the <span style="color: #f29e0e">orange box</span> is synthesized for the time of input views
+        t0 (Eq. (11)), whose image style is consistent with input views</figcaption>
+    </div>
+
+    
+</section>
+&ensp;
+<!-- Paper method. -->
+<div class="columns is-centered has-text-centered">
+  <div class="column is-four-fifths">
+    <h2 class="title is-3">Method</h2>
+    <!-- <div class="publication-video">
+      <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
+              frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div> -->
+    <center> <img src="image/method.jpg" alt="method Image" id="method-image" style="width:200%;height:200%;"></center>
+    
+  </div>
+</div>
+<div class="columns is-centered has-text-left">
+<div class="column is-four-fifths">
+  <h3><b>Architecture Overview. The proposed framework comprises five main parts:<b></h3>
+    <h4>(a) The appearance-agnostic geometry extractor is designed to extract geometry features for each input view. The design of this module allows the model to operate in a few-shot setting
+      without the need for per-scene optimization. It constructs cost volumes and works under various capture conditions by utilizing the content
+      features (Sec. 3.3).</h4>
+      
+    <h4>(b) For each sample point x, the implicit scene network predicts its corresponding content feature and density by
+    aggregating geometry features, content features, and viewing directions, thus constructing a content radiance field (Sec. 3.4). </h4>
+    <h4>(c) The factor extraction module predicts both the time and time-irrelevant features. Note that time prediction is only required during training (Sec. 3.5).</h4>
+    <h4>(d) The time-dependent radiance field constructor transforms the content radiance field into the time-dependent radiance field based on the information from the factor extraction module (Sec. 3.6). </h4>
+    <h4>(e) Finally, a novel view at time t is rendered via standard volume rendering</h4>
+
+</div>
+</div>
+<!--/ Paper method. -->
+<section class="section">
+  <div class="container is-full-width">
+
+
+
+      <div class="columns is-centered has-text-centered">
+          <h2 class="title is-3">Experimental results</h2>
+         
+
+      </div>
+
+
+      <h2 class="title is-4">Spatial and Temporal video</h2>
+
+      <div class="video-container">
+        <div class="video-item">
+            <video id="video1" width="560" height="315" controls autoplay>
+                <source src="video/Playground_48Phi.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="video-item">
+            <video id="video2" width="560" height="315" controls autoplay>
+                <source src="video/Playground_48Phi.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+
+    <h2 class="title is-4">Novel View Synthesis Across Time</h2>
+    <!-- <img src="image/cross_time_train.jpg"> -->
+    <div class="zoomable-image">
+      <img src="image/cross_time_train.jpg" alt="Cross Time Train" id="originalImage">
+      <div class="zoomed-image" id="zoomedImage"></div>
+    </div>
+
+
+    <img src="image/Timenerf_survey.png">
+    
+
+      <!-- <div class="column">
+        <p>
+          <i>Family</i> 
+        </p>
+        <video id="CoMoGAN_Family" autoplay controls muted loop playsinline height="100%", width="100%">
+          <source src="video/CoMoGAN_Family.mp4"
+                  type="video/mp4">
+        </video>
+        <p>
+          <i>Horse</i> 
+        </p>
+        <video id="CoMoGAN_Horse" autoplay controls muted loop playsinline height="100%">
+          <source src="video/CoMoGAN_Horse.mp4"
+                  type="video/mp4">
+        </video>
+      </div> -->
+
+
+
+      <!-- CoMoGAN. -->
+      <!-- <div class="column">
+        <div class="content">
+          <h2 class="title is-3">CoMoGAN</h2>
+          <p>
+            <i>Family</i> 
+          </p>
+          <video id="CoMoGAN_Family" autoplay controls muted loop playsinline height="200%", width="200%">
+            <source src="video/CoMoGAN_Family.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            <i>Horse</i> 
+          </p>
+          <video id="CoMoGAN_Horse" autoplay controls muted loop playsinline height="200%">
+            <source src="video/CoMoGAN_Horse.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            <i>Playground</i> 
+          </p>
+          <video id="CoMoGAN_Playground" autoplay controls muted loop playsinline height="200%">
+            <source src="video/CoMoGAN_Playground.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            <i>Train</i> 
+          </p>
+          <video id="CoMoGAN_Train" autoplay controls muted loop playsinline height="200%">
+            <source src="video/CoMoGAN_Train.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div> -->
+      <!--/ CoMoGAN -->
+
+      <!-- HiDT. -->
+      <!-- <div class="column">
+        <div class="content">
+          <h2 class="title is-3">HiDT</h2>
+          <p>
+            <i>Family</i> 
+          </p>
+          <video id="HiDT_Family" autoplay controls muted loop playsinline height="200%">
+            <source src="video/HiDT_Family.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            <i>Horse</i> 
+          </p>
+          <video id="HiDT_Horse" autoplay controls muted loop playsinline height="200%">
+            <source src="video/HiDT_Horse.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            <i>Playground</i> 
+          </p>
+          <video id="HiDT_Playground" autoplay controls muted loop playsinline height="200%">
+            <source src="video/HiDT_Playground.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            <i>Train</i> 
+          </p>
+          <video id="HiDT_Train" autoplay controls muted loop playsinline height="200%">
+            <source src="video/HiDT_Train.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div> -->
+      <!--/ HiDT. -->
+
+      <!-- DRIT++. -->
+      <!-- <div class="column">
+        <div class="content">
+          <h2 class="title is-3">DRIT++</h2>
+          <p>
+            <i>Family</i> 
+          </p>
+          <video id="MDMM_Family" autoplay controls muted loop playsinline height="200%">
+            <source src="video/MDMM_Family.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            <i>Horse</i> 
+          </p>
+          <video id="MDMM_Horse" autoplay controls muted loop playsinline height="200%">
+            <source src="video/MDMM_Horse.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            <i>Playground</i> 
+          </p>
+          <video id="MDMM_Playground" autoplay controls muted loop playsinline height="200%">
+            <source src="video/MDMM_Playground.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            <i>Train</i> 
+          </p>
+          <video id="MDMM_Train" autoplay controls muted loop playsinline height="200%">
+            <source src="video/MDMM_Train.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div> -->
+      <!--/ DRIT++. -->
+
+      <!-- TimeNerf++. -->
+      <!-- <div class="column">
+        <div class="content">
+          <h2 class="title is-3">TimeNerf</h2>
+          <p>
+            <i>Family</i> 
+          </p>
+          <video id="geonerf_modify_plusMDMM_Family" style="display: none;" autoplay controls muted loop playsinline height="200%">
+            <source src="video/geonerf_modify_plusMDMM_Family.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            <i>Horse</i> 
+          </p>
+          <video id="geonerf_modify_plusMDMM_Horse" autoplay controls muted loop playsinline height="200%">
+            <source src="video/geonerf_modify_plusMDMM_Horse.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            <i>Playground</i> 
+          </p>
+          <video id="geonerf_modify_plusMDMM_Playground" autoplay controls muted loop playsinline height="200%">
+            <source src="video/geonerf_modify_plusMDMM_Playground.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            <i>Train</i> 
+          </p>
+          <video id="geonerf_modify_plusMDMM_Train" autoplay controls muted loop playsinline height="200%">
+            <source src="video/geonerf_modify_plusMDMM_Train.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div> -->
+    <!--/ TimeNerf. -->
+
+    <!-- </div> -->
+    
+    
+    <!-- <img src="image/output.gif" alt="Animated GIF"> -->
+
+
+
+
+    
+
+
+  </div>
+</section>
+
+<script>
+  // Lấy các thẻ video
+  const videos = document.querySelectorAll('video');
+
+  // Thiết lập tốc độ phát video
+  videos.forEach(video => {
+      video.playbackRate = 2; // Tốc độ phát video là 1.5 lần tốc độ bình thường
+  });
+
+
+  // zoom image
+  const originalImage = document.getElementById('originalImage');
+const zoomedImage = document.getElementById('zoomedImage');
+const zoomCanvas = document.getElementById('zoomCanvas');
+// const ctx = zoomCanvas.getContext('2d');
+
+originalImage.addEventListener('mousemove', function(event) {
+    const { offsetX, offsetY } = event;
+    const zoomSize = 200; // Kích thước của vùng zoom
+    const zoomFactor = 2; // Tỷ lệ zoom
+
+    const zoomedWidth = originalImage.width * zoomFactor;
+    const zoomedHeight = originalImage.height * zoomFactor;
+
+    const offsetXPercent = offsetX / originalImage.width;
+    const offsetYPercent = offsetY / originalImage.height;
+
+    const zoomedX = -offsetXPercent * (zoomedWidth - zoomSize);
+    const zoomedY = -offsetYPercent * (zoomedHeight - zoomSize);
+
+    zoomedImage.style.backgroundImage = `url('${originalImage.src}')`;
+    zoomedImage.style.backgroundSize = `${zoomedWidth}px ${zoomedHeight}px`;
+    zoomedImage.style.backgroundPosition = `${zoomedX}px ${zoomedY}px`;
+
+    zoomedImage.style.width = `${zoomSize}px`;
+    zoomedImage.style.height = `${zoomSize}px`;
+
+    zoomedImage.style.left = `${offsetX + zoomSize}px`; // Thêm zoomSize để di chuyển vùng zoom khỏi con chuột
+    zoomedImage.style.top = `${offsetY}px`;
+
+    zoomedImage.style.display = 'block';
+    // Vẽ vùng zoom lên canvas
+    // ctx.clearRect(0, 0, zoomCanvas.width, zoomCanvas.height);
+    // ctx.drawImage(originalImage, offsetX - zoomSize / 2, offsetY - zoomSize / 2, zoomSize, zoomSize, 0, 0, zoomCanvas.width, zoomCanvas.height);
+
+
+    zoomCanvas.width = zoomSize;
+    zoomCanvas.height = zoomSize;
+    ctx.clearRect(0, 0, zoomCanvas.width, zoomCanvas.height);
+    ctx.drawImage(originalImage, offsetX - zoomSize / 2, offsetY - zoomSize / 2, zoomSize, zoomSize, 0, 0, zoomSize, zoomSize);
+    zoomCanvas.style.left = `${offsetX + 5}px`; // Di chuyển canvas để không che khuất chuột
+    zoomCanvas.style.top = `${offsetY + 5}px`;
+    zoomCanvas.style.display = 'block';
+});
+
+originalImage.addEventListener('mouseleave', function() {
+    zoomedImage.style.display = 'none';
+});
+</script>
+
+
+<!-- <section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{park2021nerfies,
+  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
+  title     = {Nerfies: Deformable Neural Radiance Fields},
+  journal   = {ICCV},
+  year      = {2021},
+}</code></pre>
+  </div>
+</section> -->
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/videos/nerfies_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

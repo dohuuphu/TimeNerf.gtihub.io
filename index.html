@@ -40,6 +40,49 @@
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
+
+  <style>
+    .video-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .video-item {
+        flex: 1;
+        margin-right: 10px;
+    }
+    
+    .zoomable-image {
+        position: relative;
+        overflow: hidden;
+        width: 80%; /* Kích thước của div chứa ảnh */
+        height: 80%;
+    }
+
+    .zoomed-image {
+        position: absolute;
+        border: 2px solid red;
+        display: none;
+    }
+    anvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 2px solid red;
+        display: none;
+    }
+
+    .title {
+        margin-left: 100px; /* Thụt vào 10px từ bên trái */
+    }
+
+    .center-image {
+        display: flex;
+        justify-content: center;
+    }
+</style>
   
 </head>
 <body>
@@ -280,163 +323,110 @@
 <section class="section">
   <div class="container is-full-width">
 
-    <div class="columns is-centered">
 
-      <!-- CoMoGAN. -->
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-3">CoMoGAN</h2>
-          <p>
-            <i>Family</i> 
-          </p>
-          <video id="CoMoGAN_Family" autoplay controls muted loop playsinline height="200%", width="200%">
-            <source src="video/CoMoGAN_Family.mp4"
-                    type="video/mp4">
-          </video>
-          <p>
-            <i>Horse</i> 
-          </p>
-          <video id="CoMoGAN_Horse" autoplay controls muted loop playsinline height="200%">
-            <source src="video/CoMoGAN_Horse.mp4"
-                    type="video/mp4">
-          </video>
-          <p>
-            <i>Playground</i> 
-          </p>
-          <video id="CoMoGAN_Playground" autoplay controls muted loop playsinline height="200%">
-            <source src="video/CoMoGAN_Playground.mp4"
-                    type="video/mp4">
-          </video>
-          <p>
-            <i>Train</i> 
-          </p>
-          <video id="CoMoGAN_Train" autoplay controls muted loop playsinline height="200%">
-            <source src="video/CoMoGAN_Train.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
+
+      <div class="columns is-centered has-text-centered">
+          <h2 class="title is-3">Experimental results</h2>
+         
+
       </div>
-      <!--/ CoMoGAN -->
-
-      <!-- HiDT. -->
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-3">HiDT</h2>
-          <p>
-            <i>Family</i> 
-          </p>
-          <video id="HiDT_Family" autoplay controls muted loop playsinline height="200%">
-            <source src="video/HiDT_Family.mp4"
-                    type="video/mp4">
-          </video>
-          <p>
-            <i>Horse</i> 
-          </p>
-          <video id="HiDT_Horse" autoplay controls muted loop playsinline height="200%">
-            <source src="video/HiDT_Horse.mp4"
-                    type="video/mp4">
-          </video>
-          <p>
-            <i>Playground</i> 
-          </p>
-          <video id="HiDT_Playground" autoplay controls muted loop playsinline height="200%">
-            <source src="video/HiDT_Playground.mp4"
-                    type="video/mp4">
-          </video>
-          <p>
-            <i>Train</i> 
-          </p>
-          <video id="HiDT_Train" autoplay controls muted loop playsinline height="200%">
-            <source src="video/HiDT_Train.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <!--/ HiDT. -->
-
-      <!-- DRIT++. -->
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-3">DRIT++</h2>
-          <p>
-            <i>Family</i> 
-          </p>
-          <video id="MDMM_Family" autoplay controls muted loop playsinline height="200%">
-            <source src="video/MDMM_Family.mp4"
-                    type="video/mp4">
-          </video>
-          <p>
-            <i>Horse</i> 
-          </p>
-          <video id="MDMM_Horse" autoplay controls muted loop playsinline height="200%">
-            <source src="video/MDMM_Horse.mp4"
-                    type="video/mp4">
-          </video>
-          <p>
-            <i>Playground</i> 
-          </p>
-          <video id="MDMM_Playground" autoplay controls muted loop playsinline height="200%">
-            <source src="video/MDMM_Playground.mp4"
-                    type="video/mp4">
-          </video>
-          <p>
-            <i>Train</i> 
-          </p>
-          <video id="MDMM_Train" autoplay controls muted loop playsinline height="200%">
-            <source src="video/MDMM_Train.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <!--/ DRIT++. -->
-
-      <!-- TimeNerf++. -->
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-3">TimeNerf</h2>
-          <p>
-            <i>Family</i> 
-          </p>
-          <video id="geonerf_modify_plusMDMM_Family" autoplay controls muted loop playsinline height="200%">
-            <source src="video/geonerf_modify_plusMDMM_Family.mp4"
-                    type="video/mp4">
-          </video>
-          <p>
-            <i>Horse</i> 
-          </p>
-          <video id="geonerf_modify_plusMDMM_Horse" autoplay controls muted loop playsinline height="200%">
-            <source src="video/geonerf_modify_plusMDMM_Horse.mp4"
-                    type="video/mp4">
-          </video>
-          <p>
-            <i>Playground</i> 
-          </p>
-          <video id="geonerf_modify_plusMDMM_Playground" autoplay controls muted loop playsinline height="200%">
-            <source src="video/geonerf_modify_plusMDMM_Playground.mp4"
-                    type="video/mp4">
-          </video>
-          <p>
-            <i>Train</i> 
-          </p>
-          <video id="geonerf_modify_plusMDMM_Train" autoplay controls muted loop playsinline height="200%">
-            <source src="video/geonerf_modify_plusMDMM_Train.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-    <!--/ TimeNerf. -->
-
-    </div>
-    
-
-    <img src="image/output.gif" alt="Animated GIF">
-
-
-    <iframe name="opinionstage-widget" src="https://www.opinionstage.com/api/v2/widgets/5d51e4ab-1f1a-45de-91ce-1788d85ffb1b/iframe" data-opinionstage-iframe="5d51e4ab-1f1a-45de-91ce-1788d85ffb1b" width="100%" height="800" scrolling="auto" style="border: none;" frameBorder="0" allow="fullscreen" webkitallowfullscreen="true" mozallowfullscreen="true" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-
 
   </div>
 </section>
+
+
+
+<h2 class="title is-4">Spatial and Temporal video</h2>
+
+<div class="video-container">
+  <div class="video-item">
+      <video id="video1" width="560" height="315" controls autoplay>
+          <source src="video/Playground_48Phi.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+      </video>
+  </div>
+  <div class="video-item">
+      <video id="video2" width="560" height="315" controls autoplay>
+          <source src="video/Playground_48Phi.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+      </video>
+  </div>
+</div>
+
+<br>
+<br>
+
+<h2 class="title is-4">Novel View Synthesis Across Time</h2>
+    <!-- <img src="image/cross_time_train.jpg"> -->
+    <div class="zoomable-image">
+      <img src="image/cross_time_train.jpg" alt="Cross Time Train" id="originalImage">
+      <div class="zoomed-image" id="zoomedImage"></div>
+      <canvas id="zoomCanvas"></canvas>
+    </div>
+
+
+  
+    
+<br>
+<div class="center-image">
+  <img src="image/Timenerf_survey.png" alt="Timenerf Survey">
+</div>
+
+<script>
+  // Lấy các thẻ video
+  const videos = document.querySelectorAll('video');
+
+  // Thiết lập tốc độ phát video
+  videos.forEach(video => {
+      video.playbackRate = 2; // Tốc độ phát video là 1.5 lần tốc độ bình thường
+  });
+
+
+  // zoom image
+  const originalImage = document.getElementById('originalImage');
+    const zoomedImage = document.getElementById('zoomedImage');
+    const zoomCanvas = document.getElementById('zoomCanvas');
+    const ctx = zoomCanvas.getContext('2d');
+
+    originalImage.addEventListener('mousemove', function(event) {
+        const { offsetX, offsetY } = event;
+        const zoomSize = 200; // Kích thước của vùng zoom
+        const zoomFactor = 2; // Tỷ lệ zoom
+
+        const zoomedWidth = originalImage.width * zoomFactor;
+        const zoomedHeight = originalImage.height * zoomFactor;
+
+        const offsetXPercent = offsetX / originalImage.width;
+        const offsetYPercent = offsetY / originalImage.height;
+
+        const zoomedX = -offsetXPercent * (zoomedWidth - zoomSize);
+        const zoomedY = -offsetYPercent * (zoomedHeight - zoomSize);
+
+        zoomedImage.style.backgroundImage = `url('${originalImage.src}')`;
+        zoomedImage.style.backgroundSize = `${zoomedWidth}px ${zoomedHeight}px`;
+        zoomedImage.style.backgroundPosition = `${zoomedX}px ${zoomedY}px`;
+
+        zoomedImage.style.width = `${zoomSize}px`;
+        zoomedImage.style.height = `${zoomSize}px`;
+
+        zoomedImage.style.left = `${offsetX + zoomSize}px`; // Thêm zoomSize để di chuyển vùng zoom khỏi con chuột
+        zoomedImage.style.top = `${offsetY}px`;
+
+        zoomedImage.style.display = 'block';
+
+        // Vẽ vùng zoom lên canvas
+        zoomCanvas.width = zoomSize;
+        zoomCanvas.height = zoomSize;
+        ctx.clearRect(0, 0, zoomCanvas.width, zoomCanvas.height);
+        ctx.drawImage(originalImage, offsetX - zoomSize / 2, offsetY - zoomSize / 2, zoomSize, zoomSize, 0, 0, zoomSize, zoomSize);
+        zoomCanvas.style.display = 'block';
+    });
+
+    originalImage.addEventListener('mouseleave', function() {
+        zoomedImage.style.display = 'none';
+        zoomCanvas.style.display = 'none';
+    });
+</script>
 
 
 <!-- <section class="section" id="BibTeX">
