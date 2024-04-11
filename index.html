@@ -49,6 +49,12 @@
         max-width: 1200px;
         margin: 0 auto;
     }
+    .video-container_midle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh; */
+  }
     .video-item {
         flex: 1;
         margin-right: 10px;
@@ -346,9 +352,19 @@
       </video>
   </div>
     <video id="video2" width="560" height="315" controls autoplay>
-        <source src="video/playground_spatial.mp4" type="video/mp4">
+        <source src="video/playground_spatial_only.mp4" type="video/mp4">
         Your browser does not support the video tag.
-  </div>
+  </video>
+
+ 
+</div>
+<br>
+<br>
+<div class="video-container_midle">
+<video id="video3" width="560" height="315" controls autoplay>
+  <source src="video/playground_spatial.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 </div>
 
 <br>
